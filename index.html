@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>LootKart — User Panel</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ░░ PARTICLE CANVAS ░░ -->
+<canvas id="p-canvas"></canvas>
+
+<!-- ░░ CURSOR DOT ░░ -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<div class="app" id="app">
+
+<!-- ═══════════════════════════════
+     AUTH SCREEN  (Login + Signup)
+═══════════════════════════════ -->
+<div class="screen active" id="s-auth">
+  <div class="auth-bg">
+
+    <!-- Floating shapes -->
+    <div class="auth-shape s1"></div>
+    <div class="auth-shape s2"></div>
+    <div class="auth-shape s3"></div>
+
+    <!-- Logo -->
+    <div class="auth-logo" id="auth-logo">
+      <div class="logo-ring">
+        <div class="logo-inner"><span>🛍️</span></div>
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <circle class="rt" cx="60" cy="60" r="54"/>
+          <circle class="rp" cx="60" cy="60" r="54"/>
+        </svg>
+      </div>
+      <h1 class="brand">LootKart</h1>
+      <p class="brand-s">User Panel</p>
+    </div>
+
+    <!-- AUTH CARD -->
+    <div class="auth-card" id="auth-card">
+      <div class="card-shine"></div>
+
+      <!-- ══ CREATE ACCOUNT ══ -->
+      <div class="auth-form" id="form-signup">
+
+        <!-- STEP 1: 4 fields + Send OTP -->
+        <div id="signup-step1">
+          <div class="auth-title-row">
+            <div class="auth-title-ico">🛍️</div>
+            <div>
+              <div class="auth-title-main">Create Account</div>
+              <div class="auth-title-sub">Join LootKart &amp; start earning!</div>
+            </div>
+          </div>
+
+          <div class="ig"><label>🆔 Username</label><div class="iw"><input type="text" id="r-uname" placeholder="Choose a username" autocomplete="username"/><div class="il"></div></div></div>
+          <div class="ig"><label>📱 Phone Number</label><div class="iw"><input type="tel" id="r-phone" placeholder="+91 9876543210" autocomplete="tel"/><div class="il"></div></div></div>
+          <div class="ig"><label>📧 Email</label><div class="iw"><input type="email" id="r-email" placeholder="you@email.com" autocomplete="email"/><div class="il"></div></div></div>
+          <div class="ig">
+            <label>🔑 Password</label>
+            <div class="iw pw-wrap">
+              <input type="password" id="r-pass" placeholder="Create a strong password" autocomplete="new-password"/>
+              <button class="eye-btn" onclick="togglePw('r-pass',this)" tabindex="-1">👁</button>
+              <div class="il"></div>
+            </div>
+          </div>
+
+          <button class="glow-btn" id="signup-otp-btn" onclick="sendSignupOTP()">
+            <span class="bt" id="signup-otp-text">📧 Send OTP</span>
+            <div class="br"></div>
+          </button>
+
+          <div class="otp-error-box" id="signup-error-box"></div>
+
+          <div class="auth-switch" style="margin-top:12px">
+            Already have an account? <a onclick="gotoExistingUser()">Login with OTP →</a>
+          </div>
+        </div>
+
+        <!-- STEP 2: OTP boxes -->
+        <div id="signup-step2" style="display:none">
+          <div class="otp-sent-info">
+            <div class="osi-icon">📧</div>
+            <div class="osi-text">
+              <div class="osi-title">Check Your Email!</div>
+              <div class="osi-sub">OTP sent to <span id="signup-email-display" class="otp-em-bold"></span></div>
+            </div>
+          </div>
+          <div class="otp-boxes" id="signup-otp-boxes">
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,1)"/>
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,2)"/>
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,3)"/>
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,4)"/>
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,5)"/>
+            <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="signupOtpNext(this,6)"/>
+          </div>
+          <div class="otp-timer-row">
+            <span class="otp-timer" id="signup-otp-timer">Resend in <b id="signup-otp-countdown">60</b>s</span>
+            <button class="otp-resend-btn" id="signup-resend-btn" onclick="resendSignupOTP()" disabled>Resend</button>
+          </div>
+          <button class="glow-btn" id="create-account-btn" onclick="verifySignupOTP()">
+            <span class="bt" id="create-account-text">✅ Verify &amp; Create Account</span>
+            <div class="br"></div>
+          </button>
+          <div class="otp-error-box" id="signup-otp-error"></div>
+          <button class="otp-back-btn" onclick="resetSignupOTPFlow()">← Change details</button>
+        </div>
+
+        <!-- LOGIN PANEL (existing user) -->
+        <div id="login-panel" style="display:none">
+          <div class="auth-title-row">
+            <div class="auth-title-ico">🔑</div>
+            <div>
+              <div class="auth-title-main">Welcome Back!</div>
+              <div class="auth-title-sub">Enter your email to receive OTP</div>
+            </div>
+          </div>
+          <div id="login-step1">
+            <div class="ig"><label>📧 Your Email</label><div class="iw"><input type="email" id="otp-email" placeholder="you@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')sendEmailOTP()"/><div class="il"></div></div></div>
+            <button class="glow-btn" id="send-otp-btn" onclick="sendEmailOTP()">
+              <span class="bt" id="send-otp-text">📧 Send OTP</span>
+              <div class="br"></div>
+            </button>
+            <div class="otp-error-box" id="otp-error-box"></div>
+            <div class="auth-switch" style="margin-top:12px">
+              New user? <a onclick="gotoNewUser()">Create Account →</a>
+            </div>
+          </div>
+          <div id="email-step2" style="display:none">
+            <div class="otp-sent-info">
+              <div class="osi-icon">📧</div>
+              <div class="osi-text">
+                <div class="osi-title">Check Your Email!</div>
+                <div class="osi-sub">OTP sent to <span id="otp-email-display" class="otp-em-bold"></span></div>
+              </div>
+            </div>
+            <div class="otp-boxes" id="otp-boxes">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,1)"/>
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,2)"/>
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,3)"/>
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,4)"/>
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,5)"/>
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" onkeyup="otpBoxNext(this,6)"/>
+            </div>
+            <div class="otp-timer-row">
+              <span class="otp-timer" id="otp-timer">Resend in <b id="otp-countdown">60</b>s</span>
+              <button class="otp-resend-btn" id="otp-resend-btn" onclick="resendEmailOTP()" disabled>Resend</button>
+            </div>
+            <button class="glow-btn" id="verify-otp-btn" onclick="verifyEmailOTP()">
+              <span class="bt" id="verify-otp-text">✅ Verify &amp; Login</span>
+              <div class="br"></div>
+            </button>
+            <button class="otp-back-btn" onclick="resetLoginFlow()">← Change email</button>
+          </div>
+        </div>
+
+      </div><!-- /form-signup -->
+    </div><!-- /auth-card -->
+  </div><!-- /auth-bg -->
+</div><!-- /s-auth -->
+
+
+<!-- ═══════════════════════════════
+     MAIN APP
+═══════════════════════════════ -->
+<div class="screen" id="s-app">
+  <div class="top-bar" id="top-bar">
+    <div class="tb-l"><div class="tb-logo">🛍️</div><span class="tb-brand">LootKart</span></div>
+    <div class="tb-r">
+      <div class="tb-ico notif-ico" onclick="gotoSec('notifications')">🔔<span class="nbadge" id="notif-cnt">0</span></div>
+      <div class="tb-ico" onclick="gotoSec('profile')">👤</div>
+    </div>
+  </div>
+
+  <div class="sec-nav">
+    <button class="snav active" data-s="home"          onclick="gotoSec('home',this)">🏠 Home</button>
+    <button class="snav"        data-s="deals"         onclick="gotoSec('deals',this)">🔥 Deals</button>
+    <button class="snav"        data-s="partners"      onclick="gotoSec('partners',this)">🤝 Partners</button>
+    <button class="snav"        data-s="stores"        onclick="gotoSec('stores',this)">🛒 Stores</button>
+    <button class="snav"        data-s="rewards"       onclick="gotoSec('rewards',this)">🪙 Rewards</button>
+    <button class="snav"        data-s="refer"         onclick="gotoSec('refer',this)">👥 Refer</button>
+    <button class="snav"        data-s="wallet"        onclick="gotoSec('wallet',this)">💰 Wallet</button>
+    <button class="snav"        data-s="alerts"        onclick="gotoSec('alerts',this)">📉 Alerts</button>
+    <button class="snav"        data-s="notifications" onclick="gotoSec('notifications',this)">🔔 Notifs</button>
+    <button class="snav"        data-s="profile"       onclick="gotoSec('profile',this)">👤 Profile</button>
+  </div>
+
+  <!-- HOME -->
+  <section class="sec active" id="sec-home"><div class="si">
+    <div class="slider-wrap" id="slider-wrap">
+      <div class="slider-track" id="slider-track"></div>
+      <button class="sl-prev" onclick="sliderPrev()">&#8249;</button>
+      <button class="sl-next" onclick="sliderNext()">&#8250;</button>
+      <div class="sl-dots" id="sl-dots"></div>
+    </div>
+    <div class="srch-bar"><span>🔍</span><input type="text" placeholder="Search deals and products..." oninput="searchProds(this.value)"/></div>
+    <div class="loot-banner">
+      <span class="lb-badge">🔥 TODAY'S LOOT</span><h3>iPhone ₹1 Deal! 🎁</h3><p>Limited slots — Grab before gone!</p>
+      <div class="lb-row">
+        <button class="btn-grab" onclick="ripple(this)">Grab Deal 🚀</button>
+        <div class="cd">
+          <div class="cd-box"><span class="cdn" id="cd-h">04</span><span class="cdl">HRS</span></div>
+          <div class="cd-sep">:</div><div class="cd-box"><span class="cdn" id="cd-m">23</span><span class="cdl">MIN</span></div>
+          <div class="cd-sep">:</div><div class="cd-box"><span class="cdn" id="cd-s">00</span><span class="cdl">SEC</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="qs-row">
+      <div class="qs-card qb"><div class="qi">🪙</div><div class="qv" id="qs-c">0</div><div class="ql">Coins</div></div>
+      <div class="qs-card qg" onclick="claimDaily()"><div class="qi">🎁</div><div class="qv" id="qs-d">Claim</div><div class="ql">Daily</div></div>
+      <div class="qs-card qp" onclick="gotoSec('deals')"><div class="qi">🔥</div><div class="qv" id="qs-dn">0</div><div class="ql">Deals</div></div>
+    </div>
+    <div class="sh"><h3>🤝 Partners</h3><span class="sa" onclick="gotoSec('partners')">See All</span></div>
+    <div class="partners-strip" id="home-partners"></div>
+    <div class="sh"><h3>📦 Trending Deals</h3><span class="sa" onclick="gotoSec('deals')">See All</span></div>
+    <div class="pg" id="home-prods"></div>
+    <div class="sh"><h3>🎁 Earn Coins</h3></div>
+    <div class="earn-row">
+      <div class="earn-card ec-g" onclick="claimDaily()"><div class="ei">🎁</div><h4>Daily Reward</h4><p>Login daily!</p><button class="eb" id="daily-btn">Claim 10 🪙</button></div>
+      <div class="earn-card ec-p" onclick="openSpin()"><div class="ei">🎡</div><h4>Spin &amp; Win</h4><p>Win coins!</p><button class="eb">Spin Now</button></div>
+    </div>
+  </div></section>
+
+  <!-- DEALS -->
+  <section class="sec" id="sec-deals"><div class="si">
+    <div class="sh"><h3>🔥 All Deals</h3></div>
+    <div class="ftabs">
+      <button class="ft active" onclick="filterD(this,'all')">All</button>
+      <button class="ft" onclick="filterD(this,'electronics')">Electronics</button>
+      <button class="ft" onclick="filterD(this,'fashion')">Fashion</button>
+      <button class="ft" onclick="filterD(this,'sports')">Sports</button>
+      <button class="ft" onclick="filterD(this,'home')">Home</button>
+    </div>
+    <div class="pg" id="deals-prods"></div>
+  </div></section>
+
+  <!-- PARTNERS -->
+  <section class="sec" id="sec-partners"><div class="si">
+    <div class="sh"><h3>🤝 Our Partners</h3></div>
+    <p style="font-size:12px;color:var(--sub);margin-bottom:16px">Shop from trusted partners and earn extra coins!</p>
+    <div class="partners-grid" id="partners-grid"></div>
+  </div></section>
+
+  <!-- STORES -->
+  <section class="sec" id="sec-stores"><div class="si">
+    <div class="sh"><h3>🛒 Top Stores</h3></div>
+    <div class="stores-grid">
+      <div class="sc-card sc-b"  onclick="storeClick('Flipkart')"><div class="sc-i">🏬</div><div class="sc-n">Flipkart</div><div class="sc-s">Shop Now</div></div>
+      <div class="sc-card sc-go" onclick="storeClick('Amazon')"><div class="sc-i">📦</div><div class="sc-n">Amazon</div><div class="sc-s">Shop Now</div></div>
+      <div class="sc-card sc-v"  onclick="storeClick('Ajio')"><div class="sc-i">👗</div><div class="sc-n">Ajio</div><div class="sc-s">Shop Now</div></div>
+      <div class="sc-card sc-pk" onclick="storeClick('Myntra')"><div class="sc-i">👠</div><div class="sc-n">Myntra</div><div class="sc-s">Shop Now</div></div>
+      <div class="sc-card sc-gr" onclick="storeClick('Croma')"><div class="sc-i">📱</div><div class="sc-n">Croma</div><div class="sc-s">Shop Now</div></div>
+      <div class="sc-card sc-b"  onclick="storeClick('Meesho')"><div class="sc-i">🛒</div><div class="sc-n">Meesho</div><div class="sc-s">Shop Now</div></div>
+    </div>
+  </div></section>
+
+  <!-- REWARDS -->
+  <section class="sec" id="sec-rewards"><div class="si">
+    <div class="coins-hero"><div class="ch-glow"></div><div class="ch-ico">🪙</div><div class="ch-amt" id="rwd-coins">0</div><div class="ch-lbl">Total Coins Balance</div><div class="ch-sub">Earn by spinning, referring &amp; daily login!</div></div>
+    <div class="earn-row">
+      <div class="earn-card ec-g" onclick="claimDaily()"><div class="ei">🎁</div><h4>Daily</h4><p>10 coins!</p><button class="eb" id="daily-btn2">Claim 10 🪙</button></div>
+      <div class="earn-card ec-p" onclick="openSpin()"><div class="ei">🎡</div><h4>Spin &amp; Win</h4><p>Spin!</p><button class="eb">Spin Now</button></div>
+    </div>
+    <div class="sh"><h3>📋 Coins History</h3></div>
+    <div id="coins-hist"></div>
+  </div></section>
+
+  <!-- REFER -->
+  <section class="sec" id="sec-refer"><div class="si">
+    <div class="gc-v refer-card"><div class="card-shine"></div>
+      <h3>👥 Refer &amp; Earn!</h3><p>Share your code, earn coins for every friend</p>
+      <div class="ref-box"><span class="ref-code" id="ref-code">LKART01</span><button class="copy-btn" onclick="copyCode()">📋 Copy</button></div>
+      <div class="rwd-chips">
+        <div class="rc"><div class="rcc">🪙 100</div><p>Friend Signup</p></div>
+        <div class="rc"><div class="rcc">🪙 50</div><p>Friend Order</p></div>
+        <div class="rc"><div class="rcc">🪙 25</div><p>Spin Bonus</p></div>
+      </div>
+    </div>
+    <div class="gc-b how-card">
+      <h4>How It Works 📖</h4>
+      <div class="step"><div class="sn">1</div><div class="si2"><b>Share your code</b><p>Send referral code to friends</p></div></div>
+      <div class="step"><div class="sn">2</div><div class="si2"><b>Friend signs up</b><p>They join → You get 🪙 100</p></div></div>
+      <div class="step"><div class="sn">3</div><div class="si2"><b>Friend orders</b><p>They order → You get 🪙 50</p></div></div>
+      <div class="step"><div class="sn">4</div><div class="si2"><b>Redeem coins</b><p>Convert to real cash!</p></div></div>
+    </div>
+  </div></section>
+
+  <!-- WALLET -->
+  <section class="sec" id="sec-wallet"><div class="si">
+    <div class="gc-g wallet-card"><div class="card-shine"></div>
+      <div class="wc-top"><div class="wc-l">💰 My Wallet</div><div class="wc-b">🪙 <span id="wallet-c">0</span></div></div>
+      <div class="wc-rates">
+        <div class="ri"><span>1000🪙</span><b>=₹10</b></div><div class="ri"><span>2000🪙</span><b>=₹20</b></div>
+        <div class="ri"><span>3000🪙</span><b>=₹30</b></div><div class="ri"><span>4000🪙</span><b>=₹40</b></div>
+        <div class="ri"><span>5000🪙</span><b>=₹50</b></div>
+      </div>
+      <button class="glow-btn" onclick="doWithdraw()"><span class="bt">💸 Withdraw Coins</span><div class="br"></div></button>
+    </div>
+    <div class="sh"><h3>📜 Withdraw History</h3></div>
+    <div class="empty-b"><div>💸</div><p>No withdrawals yet</p></div>
+  </div></section>
+
+  <!-- ALERTS -->
+  <section class="sec" id="sec-alerts"><div class="si">
+    <div class="sh"><h3>📉 Price Drop Alerts</h3></div>
+    <div id="alerts-list">
+      <div class="al-card"><div class="al-i" style="background:rgba(255,80,80,.15)">🚨</div><div class="al-inf"><div class="al-n">Galaxy Watch</div><div class="al-p"><span class="alo">₹999</span><span class="aln">→ ₹699</span></div></div><button class="btn-grabs" onclick="ripple(this)">Grab</button></div>
+      <div class="al-card"><div class="al-i" style="background:rgba(150,80,255,.15)">📉</div><div class="al-inf"><div class="al-n">JBL Speaker</div><div class="al-p"><span class="alo">₹999</span><span class="aln">→ ₹649</span></div></div><button class="btn-grabs" onclick="ripple(this)">Grab</button></div>
+    </div>
+  </div></section>
+
+  <!-- NOTIFICATIONS -->
+  <section class="sec" id="sec-notifications"><div class="si">
+    <div class="sh"><h3>🔔 Notifications</h3></div>
+    <div id="notifs-list"></div>
+    <div class="ni"><div class="ni-i" style="background:rgba(255,80,80,.15)">🚨</div><div class="ni-t"><h4>Price Drop Alert!</h4><p>Galaxy Watch ₹999 → ₹699</p><span class="nt">2 hrs ago</span></div></div>
+    <div class="ni"><div class="ni-i" style="background:rgba(100,200,0,.15)">🪙</div><div class="ni-t"><h4>Referral Reward!</h4><p>Friend joined. +100 coins added!</p><span class="nt">1 day ago</span></div></div>
+  </div></section>
+
+  <!-- PROFILE -->
+  <section class="sec" id="sec-profile"><div class="si">
+    <div class="prof-hero">
+      <div class="pav" id="pav-img">👤</div>
+      <div class="pname" id="prof-n">User Name</div>
+      <div class="pph"   id="prof-ph">+91 9876543210</div>
+      <div class="pem"   id="prof-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="562325332416333b373f3a7835393b">[email&#160;protected]</a></div>
+      <div class="puname" id="prof-un">@username</div>
+    </div>
+    <div class="gc-g pcbar"><div class="card-shine"></div>
+      <div><div class="pclbl">Coins Balance</div><div class="pcval">🪙 <span id="prof-coins">0</span></div></div>
+      <button class="mini-btn" onclick="gotoSec('wallet')">Withdraw 💸</button>
+    </div>
+    <div class="gc-b refinl">
+      <div class="rilbl">Your Referral Code</div>
+      <div class="ref-box"><span class="ref-code" id="prof-ref">LKART01</span><button class="copy-btn" onclick="copyCode()">📋 Copy</button></div>
+    </div>
+    <div class="menu-bl">
+      <div class="mrow" onclick="openEditModal()"><div class="mri" style="background:rgba(168,85,247,.2)">✏️</div><span>Edit Profile</span><span class="marr">›</span></div>
+      <div class="mrow" onclick="gotoSec('rewards')"><div class="mri" style="background:rgba(255,160,0,.2)">💰</div><span>Coins Wallet</span><span class="marr">›</span></div>
+      <div class="mrow" onclick="gotoSec('notifications')"><div class="mri" style="background:rgba(168,85,247,.2)">🔔</div><span>Notifications</span><span class="mb2" id="prof-notif-badge">0</span><span class="marr">›</span></div>
+    </div>
+    <div class="menu-bl">
+      <div class="mrow" onclick="gotoSec('refer')"><div class="mri" style="background:rgba(100,220,100,.2)">👥</div><span>Refer &amp; Earn</span><span class="marr">›</span></div>
+      <div class="mrow" onclick="gotoSec('partners')"><div class="mri" style="background:rgba(168,85,247,.2)">🤝</div><span>Our Partners</span><span class="marr">›</span></div>
+      <div class="mrow"><div class="mri" style="background:rgba(255,100,0,.2)">❓</div><span>Help &amp; Support</span><span class="marr">›</span></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+  </div></section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav">
+    <div class="bni active" id="bn-home"     onclick="navCk('home',this)"><span class="bni-i">🏠</span><span class="bni-l">Home</span></div>
+    <div class="bni"        id="bn-deals"    onclick="navCk('deals',this)"><span class="bni-i">🔥</span><span class="bni-l">Deals</span></div>
+    <div class="bni"        id="bn-rewards"  onclick="navCk('rewards',this)"><span class="bni-i">🪙</span><span class="bni-l">Rewards</span></div>
+    <div class="bni"        id="bn-partners" onclick="navCk('partners',this)"><span class="bni-i">🤝</span><span class="bni-l">Partners</span></div>
+    <div class="bni"        id="bn-wallet"   onclick="navCk('wallet',this)"><span class="bni-i">💰</span><span class="bni-l">Wallet</span></div>
+    <div class="bni"        id="bn-refer"    onclick="navCk('refer',this)"><span class="bni-i">👥</span><span class="bni-l">Refer</span></div>
+    <div class="bni"        id="bn-profile"  onclick="navCk('profile',this)"><span class="bni-i">👤</span><span class="bni-l">Profile</span></div>
+  </nav>
+</div><!-- /s-app -->
+
+</div><!-- /app -->
+
+<!-- SPIN MODAL -->
+<div class="modal-ov" id="spin-modal">
+  <div class="modal-box">
+    <h3>🎡 Spin &amp; Win!</h3><p>Spin the wheel to win coins!</p>
+    <div class="sw-wrap"><div class="sw-ptr">▼</div><canvas id="sw-canvas" width="240" height="240"></canvas></div>
+    <button class="glow-btn" id="spin-btn" onclick="doSpin()" style="margin-top:0"><span class="bt">🎯 SPIN!</span><div class="br"></div></button>
+    <button class="mclose" onclick="closeModal('spin-modal')">✕ Close</button>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-ov" id="edit-modal">
+  <div class="modal-box modal-bot">
+    <h3>✏️ Edit Profile</h3>
+    <div class="ig"><label>Full Name</label><div class="iw"><input type="text" id="e-name"/><div class="il"></div></div></div>
+    <div class="ig"><label>Username</label><div class="iw"><input type="text" id="e-uname"/><div class="il"></div></div></div>
+    <div class="ig"><label>Email</label><div class="iw"><input type="email" id="e-email"/><div class="il"></div></div></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="glow-btn" onclick="saveEdit()" style="flex:1"><span class="bt">💾 Save</span><div class="br"></div></button>
+            <button class="logout-btn" style="flex:1;margin-top:0" onclick="closeModal('edit-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase compat SDKs v10.3.0 -->
+<script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>
