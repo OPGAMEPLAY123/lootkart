@@ -1,0 +1,21 @@
+{
+  "background_color": "#1e40af",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "LootKart",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "lootkart",
+  "start_url": "/lootkart/index.html",
+  "theme_color": "#3b82f5",
+  "id": "com.opgameplay123.lootkart",
+  "description": "LootKart is a mobile-first affiliate shopping platform where users can earn coins, claim daily rewards, and access trending deals.",
+  "lang": "en",
+  "categories": [
+    "shopping"
+  ],
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ]
+}
