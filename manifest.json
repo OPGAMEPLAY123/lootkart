@@ -1,21 +1,26 @@
 {
-  "background_color": "#1e40af",
-  "dir": "ltr",
+  "name": "LootKart — User Panel",
+  "short_name": "LootKart",
+  "start_url": "/",
   "display": "standalone",
-  "name": "LootKart",
+  "display_override": ["standalone", "fullscreen", "minimal-ui", "window-controls-overlay"],
+  "background_color": "#a855f7",
+  "theme_color": "#7c3aed",
   "orientation": "any",
   "scope": "/",
-  "short_name": "lootkart",
-  "start_url": "/lootkart/index.html",
-  "theme_color": "#3b82f5",
-  "id": "com.opgameplay123.lootkart",
-  "description": "LootKart is a mobile-first affiliate shopping platform where users can earn coins, claim daily rewards, and access trending deals.",
-  "lang": "en",
-  "categories": [
-    "shopping"
+  "description": "LootKart is a modern affiliate shopping app — earn coins, grab deals, and refer friends!",
+  "icons": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
   ],
-  "display_override": [
-    "standalone",
-    "window-controls-overlay"
-  ]
+  "lang": "en",
+  "dir": "ltr"
 }
