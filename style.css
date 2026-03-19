@@ -841,3 +841,149 @@ body{
 .psc-sub{font-size:11px;color:var(--sub);margin-top:3px}
 .psc-btn{background:var(--grad);border:none;border-radius:10px;padding:8px 14px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap}
 .psc-btn.granted{background:linear-gradient(135deg,#00c48c,#00e89e)}
+
+/* ══════════════════════════════════════════════════════
+   ADSTERRA AD UNITS — GitHub Pages Production Styles
+   Works on: opgameplay123.github.io
+   Units: Banner, Native, SmartLink, SocialBar, Popunder
+══════════════════════════════════════════════════════ */
+
+/* ── Ad Label ── */
+.ad-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,.25);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* ── Banner 320x50 ── */
+.ad-banner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0 6px;
+  margin: 0 0 12px;
+  background: rgba(0,0,0,.12);
+  border-radius: 12px;
+  border: 1px solid rgba(124,58,237,.08);
+  overflow: hidden;
+  min-height: 64px;
+}
+.ad-banner-wrap iframe,
+.ad-banner-wrap ins,
+.ad-banner-wrap > div {
+  max-width: 100% !important;
+  margin: 0 auto;
+}
+@media(min-width:380px){
+  .ad-banner-wrap { min-height: 68px; }
+}
+
+/* ── Native Banner ── */
+.ad-native-wrap {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto 16px;
+  padding: 10px 14px 14px;
+  background: rgba(9,4,30,.75);
+  border-radius: 16px;
+  border: 1px solid rgba(124,58,237,.13);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.22);
+}
+.ad-native-wrap > div[id^="container-"] {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* ── Smart Link Sponsored Card ── */
+.ad-smart-wrap {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto 16px;
+  padding: 2px 0 0;
+}
+.smart-link-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg,rgba(124,58,237,.18),rgba(168,85,247,.08));
+  border: 1.5px solid rgba(124,58,237,.32);
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .22s;
+  box-shadow: 0 2px 16px rgba(124,58,237,.12);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.smart-link-card:hover,
+.smart-link-card:active {
+  background: linear-gradient(135deg,rgba(124,58,237,.28),rgba(168,85,247,.18));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(124,58,237,.28);
+}
+.slc-ico {
+  font-size: 28px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(168,85,247,.5));
+}
+.slc-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.slc-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ede8ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.slc-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+  display: block;
+}
+.slc-arr {
+  font-size: 22px;
+  color: rgba(168,85,247,.65);
+  font-weight: 900;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* ── Desktop / tablet ── */
+@media(min-width:480px) {
+  .ad-banner-wrap,
+  .ad-native-wrap,
+  .ad-smart-wrap {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .slc-title { font-size: 14px; }
+}
+
+/* ── Very small screens ── */
+@media(max-width:320px) {
+  .smart-link-card { padding: 10px 12px; gap: 9px; }
+  .slc-ico { font-size: 22px; }
+  .slc-title { font-size: 11px; }
+  .slc-sub { font-size: 10px; }
+  .ad-banner-wrap { min-height: 58px; }
+}
+
+/* ── Social Bar spacing fix — keeps it above bottom nav ── */
+.bnav { z-index: 150 !important; }
