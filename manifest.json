@@ -16,7 +16,7 @@
   "description": "LootKart is a modern affiliate shopping app — earn coins, grab deals, and refer friends!",
   "icons": [
     {
-      "src": "/icon-512x.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
