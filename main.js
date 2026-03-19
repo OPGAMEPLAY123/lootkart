@@ -1901,3 +1901,102 @@ window.addEventListener('load', () => {
     gotoNewUser();  // Show Create Account form
   }
 });
+
+
+/* ══════════════════════════════════════════════════════
+   ADSTERRA AD MANAGEMENT
+   Domain: opgameplay123.github.io (GitHub Pages)
+   Units: Popunder, Banner, Native, SmartLink, SocialBar
+══════════════════════════════════════════════════════ */
+(function() {
+  'use strict';
+
+  /* ─── Smart Link: reward +5 coins on tap ─── */
+  function initSmartLink() {
+    var wrap = document.querySelector('.ad-smart-wrap a.smart-link-card');
+    if (!wrap) return;
+    wrap.addEventListener('click', function() {
+      try {
+        /* Award 5 coins for engaging with sponsored content */
+        var raw = localStorage.getItem('lk_cur');
+        if (raw) {
+          var cur = JSON.parse(raw);
+          if (cur && cur.id) {
+            cur.coins = (cur.coins || 0) + 5;
+            var users = JSON.parse(localStorage.getItem('lk_users') || '{}');
+            users[cur.id] = cur;
+            localStorage.setItem('lk_cur', JSON.stringify(cur));
+            localStorage.setItem('lk_users', JSON.stringify(users));
+            if (typeof showToast === 'function') showToast('🎯 +5 🪙 Coins! Enjoy your deal!');
+          }
+        }
+      } catch(e) {}
+    }, { passive: true });
+  }
+
+  /* ─── Banner: show on content sections, hide on auth ─── */
+  var bannerEl = null;
+  function manageBanner(sectionId) {
+    if (!bannerEl) bannerEl = document.getElementById('ad-banner-top');
+    if (!bannerEl) return;
+    /* Show banner on these sections */
+    var show = ['home','deals','stores','partners'].indexOf(sectionId) > -1;
+    bannerEl.style.display = show ? '' : 'none';
+  }
+
+  /* ─── Hook into section navigation ─── */
+  document.addEventListener('DOMContentLoaded', function() {
+    /* Wrap gotoSec to manage banner visibility */
+    var _orig = window.gotoSec;
+    if (typeof _orig === 'function') {
+      window.gotoSec = function(name, el) {
+        _orig.apply(this, arguments);
+        try { manageBanner(name); } catch(e) {}
+      };
+    }
+
+    /* Init smart link */
+    initSmartLink();
+
+    /* Hide banner on auth screen (not shown until app loads) */
+    if (bannerEl) bannerEl.style.display = 'none';
+
+    /* Show banner when app section becomes active */
+    var appScreen = document.getElementById('s-app');
+    if (appScreen) {
+      var obs = new MutationObserver(function(muts) {
+        muts.forEach(function(m) {
+          if (m.target.classList.contains('active')) {
+            if (bannerEl) bannerEl.style.display = '';
+          }
+        });
+      });
+      obs.observe(appScreen, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    /* Prevent ad iframes from blocking scroll on mobile */
+    var adWraps = document.querySelectorAll('.ad-banner-wrap,.ad-native-wrap');
+    var stimer;
+    window.addEventListener('scroll', function() {
+      adWraps.forEach(function(w){ w.style.pointerEvents = 'none'; });
+      clearTimeout(stimer);
+      stimer = setTimeout(function(){
+        adWraps.forEach(function(w){ w.style.pointerEvents = ''; });
+      }, 250);
+    }, { passive: true });
+
+    /* GitHub Pages: log ad status */
+    if (window.location.hostname === 'opgameplay123.github.io' ||
+        window.location.hostname === 'localhost') {
+      console.group('[LootKart Ads] Adsterra Integration Active');
+      console.log('Domain:', window.location.hostname);
+      console.log('✅ Popunder — fires on first user interaction');
+      console.log('✅ Banner 320x50 — home/deals/stores sections');
+      console.log('✅ Native Banner — between Rewards & Refer');
+      console.log('✅ Smart Link — deals section sponsored card');
+      console.log('✅ Social Bar — site-wide floating');
+      console.groupEnd();
+    }
+  });
+
+})();
