@@ -1,46 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-
-  <!-- Monetag (if needed) -->
-  <meta name="monetag" content="c69aa295fba7c0b5ac930e83a7e06fbb">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet"/>
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7c3aed">
-
-  <!-- Favicon / App Icon -->
-  <link rel="icon" href="icon-192x192.png" sizes="192x192" type="image/png">
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css"/>
-
-  <title>LootKart — User Panel</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>LootKart — User Panel</title>
+<link rel="stylesheet" href="style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <!-- ░░ PARTICLE CANVAS ░░ -->
-  <canvas id="p-canvas"></canvas>
 
-  <!-- ░░ CURSOR DOT ░░ -->
-  <div class="cursor-dot" id="cursor-dot"></div>
-  <div class="cursor-ring" id="cursor-ring"></div>
-  <div class="app" id="app"></div>
+<!-- ░░ PARTICLE CANVAS ░░ -->
+<canvas id="p-canvas"></canvas>
 
-  <!-- Service Worker Registration -->
-  <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log('Service Worker registered!'))
-    .catch(err => console.error('Service Worker registration failed:', err));
-}
-  </script>
-</body>
-</html>
+<!-- ░░ CURSOR DOT ░░ -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<div class="app" id="app">
+
 <!-- ═══════════════════════════════
      AUTH SCREEN  (Login + Signup)
 ═══════════════════════════════ -->
@@ -222,20 +199,6 @@ if ('serviceWorker' in navigator) {
 
   <!-- HOME -->
   <section class="sec active" id="sec-home"><div class="si">
-    <!-- Adsterra Banner 320x50 — Home top -->
-    <div class="ad-banner-wrap" id="ad-banner-top">
-      <div class="ad-label">Advertisement</div>
-      <script>
-        atOptions = {
-          'key' : '6ac0f09cb694b8d4e3c6e05cba0b432d',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script src="https://www.highperformanceformat.com/6ac0f09cb694b8d4e3c6e05cba0b432d/invoke.js"></script>
-    </div>
     <div class="slider-wrap" id="slider-wrap">
       <div class="slider-track" id="slider-track"></div>
       <button class="sl-prev" onclick="sliderPrev()">&#8249;</button>
@@ -280,19 +243,6 @@ if ('serviceWorker' in navigator) {
       <button class="ft" onclick="filterD(this,'sports')">Sports</button>
       <button class="ft" onclick="filterD(this,'home')">Home</button>
     </div>
-    <!-- Adsterra Smart Link — Sponsored Deal Card -->
-    <div class="ad-smart-wrap">
-      <span class="ad-label">Sponsored</span>
-      <a href="https://www.profitablecpmratenetwork.com/qmk2cft6?key=c07a164dc150e50df803b270be9e76a3"
-         target="_blank" rel="noopener noreferrer" class="smart-link-card">
-        <span class="slc-ico">🎯</span>
-        <span class="slc-txt">
-          <span class="slc-title">🔥 Exclusive Offer — Tap to Unlock!</span>
-          <span class="slc-sub">Limited time deal • Earn extra coins</span>
-        </span>
-        <span class="slc-arr">›</span>
-      </a>
-    </div>
     <div class="pg" id="deals-prods"></div>
   </div></section>
 
@@ -326,15 +276,6 @@ if ('serviceWorker' in navigator) {
     <div class="sh"><h3>📋 Coins History</h3></div>
     <div id="coins-hist"></div>
   </div></section>
-
-  <!-- Adsterra Native Banner — between Rewards & Refer -->
-  <div class="ad-native-wrap">
-    <div class="ad-label">Advertisement</div>
-    <script async="async" data-cfasync="false"
-      src="https://pl28946456.profitablecpmratenetwork.com/ed5e3db9ed792b7a449e002616bc1185/invoke.js">
-    </script>
-    <div id="container-ed5e3db9ed792b7a449e002616bc1185"></div>
-  </div>
 
   <!-- REFER -->
   <section class="sec" id="sec-refer"><div class="si">
@@ -394,7 +335,7 @@ if ('serviceWorker' in navigator) {
       <div class="pav" id="pav-img">👤</div>
       <div class="pname" id="prof-n">User Name</div>
       <div class="pph"   id="prof-ph">+91 9876543210</div>
-      <div class="pem"   id="prof-em"><span id="prof-em-txt">user@email.com</span></div>
+      <div class="pem"   id="prof-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="562325332416333b373f3a7835393b">[email&#160;protected]</a></div>
       <div class="puname" id="prof-un">@username</div>
     </div>
     <div class="gc-g pcbar"><div class="card-shine"></div>
@@ -464,8 +405,5 @@ if ('serviceWorker' in navigator) {
 <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
 
 <script src="app.js"></script>
-
-<!-- Adsterra Social Bar — site-wide floating -->
-<script src="https://pl28946462.profitablecpmratenetwork.com/a2/60/ee/a260ee6592d4249758cc61e14361e129.js"></script>
 </body>
-               </html>
+  </html>
