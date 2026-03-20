@@ -1,2 +1,0 @@
-# lootkart
-Shopping web app
