@@ -2,6 +2,7 @@
   "name": "LootKart",
   "short_name": "LootKart",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#a855f7",
   "theme_color": "#7c3aed",
